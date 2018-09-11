@@ -1,0 +1,22 @@
+#配置数据源
+spring:
+  datasource:
+     url: jdbc:mysql://localhost:3306/blueray?useUnicode=true&characterEncoding=utf8
+     username: root
+     password: root123456
+     driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
+    servlet:
+      content-type: text/html
+#指定mybatis映射文件的地址
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.yq.blueray.entity
+server:
+  port: 8080
