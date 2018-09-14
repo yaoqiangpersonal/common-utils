@@ -1,9 +1,6 @@
 package com.yq.blueray.utils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,8 +9,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import base.Generator;
-import base.impl.generator.BasicGenerator;
+import com.yq.blueray.common.base.Generator;
+import com.yq.blueray.common.base.impl.generator.BasicGenerator;
 import org.apache.commons.beanutils.BeanUtils;
 
 
@@ -51,25 +48,25 @@ public class CSVUtil<T> {
 	 * 读取
 	 *
 	 * @param c class类型
-	 * @param file	需要读取的文件
+	 * @param is	需要读取的文件
 	 * @return 返回集合
 	 */
-	public static <T> List<T> csvToList(Class<T> c,File file){
+	public static <T> List<T> csvToList(Class<T> c,InputStream is){
 		Properties pro = new Properties();
-		return read(c,file,pro);
+		return read(c,is,pro);
 	}
 
 	/**
 	 * 读取重载
 	 *
 	 * @param c
-	 * @param file
+	 * @param is
 	 * @param pro 自己设置好的配置文件pro
 	 *
 	 * @return
 	 */
-	public static <T> List<T> csvToList(Class<T> c,File file,Properties pro){
-		return read(c,file,pro);
+	public static <T> List<T> csvToList(Class<T> c, InputStream is, Properties pro){
+		return read(c,is,pro);
 	}
 
 	/**
@@ -78,13 +75,13 @@ public class CSVUtil<T> {
 	 *
 	 * @param c 类型
 	 *
-	 * @param file 文件
+	 * @param is 流
 	 *
 	 * @return
 	 */
-	private static <T>  List<T> read(Class<T> c,File file,Properties pro){
+	private static <T>  List<T> read(Class<T> c,InputStream is,Properties pro){
 
-		getReader(file);
+		getReader(is);
 
 		List<T> result = writeToObj(c,pro);
 
@@ -242,11 +239,11 @@ public class CSVUtil<T> {
 	 *
 	 * 获取csvreader
 	 *
-	 * @param file
+	 * @param is
 	 */
-	private static void getReader(File file) {
+	private static void getReader(InputStream is) {
 		try {
-			reader = new FileReader(file);
+			reader = new InputStreamReader(is,"GBK");
 		} catch (Exception e) {
 			try {
 				reader.close();
