@@ -1,0 +1,75 @@
+spring:
+  datasource:
+      dynamic:
+        mp-enabled: true #默认为false，不要随便开启，有微小的性能损失
+        primary: master #设置默认的数据源或者数据源组,默认值即为master,如果你主从默认下主库的名称就是master可不定义此项。
+        datasource:
+          master:
+            username: root
+            password: root123456
+            driver-class-name: com.mysql.jdbc.Driver
+            url: jdbc:mysql://localhost:3306/blueray?useUnicode=true&characterEncoding=utf8
+          sqlserver:
+            username: sa
+            password: nankai.2017
+            driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+            url: jdbc:sqlserver://192.168.1.200:1433;Database=mpdisk
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  thymeleaf:
+    cache: false
+    prefix: classpath:templates/html/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
+
+    servlet:
+      content-type: text/html
+      multipart:
+        enabled: true
+        resolve-lazily: true
+        max-file-size: 100MB
+
+  mvc:
+    static-path-pattern: /static/**
+
+  resources: classpath:/static/**
+
+#指定mybatis映射文件的地址
+mybatis:
+  #mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.yq.blueray.taobao.entity
+
+#服务器设置
+server:
+  port: 8080
+multipart:
+  maxFileSize: 10Mb
+  maxRequestSize: 50Mb
+
+#日志设置
+logging:
+  file: logs/application-debug.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: debug
+    com.howtodoinjava: INFO
+    org.hibernate: ERROR
+#最大连接数
+http:
+  maxTotal: 100
+#并发数
+  defaultMaxPerRoute: 20
+#创建连接的最长时间
+  connectTimeout: 1000
+#从连接池中获取到连接的最长时间
+  connectionRequestTimeout: 500
+#数据传输的最长时间
+  socketTimeout: 10000
+#提交请求前测试连接是否可用
+  staleConnectionCheckEnabled: true
+
+
