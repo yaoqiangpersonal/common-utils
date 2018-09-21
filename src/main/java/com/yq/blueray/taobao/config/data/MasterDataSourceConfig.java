@@ -22,13 +22,13 @@ import javax.sql.DataSource;
  * @Date: 2018-09-12 18:20
  * @Description:
  */
-@Configuration
+
 // 扫描 Mapper 接口并容器管理
 @MapperScan(basePackages = MasterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "masterSqlSessionFactory")
 public class MasterDataSourceConfig extends AbstractMultipleDataSourceConfig {
 
     // 精确到 master 目录，以便跟其他数据源隔离
-    static final String PACKAGE = "com.yq.blueray.taobao.dao.blueray";
+    static final String PACKAGE = "com.yq.blueray.taobao.mapper.blueray";
 
 
     public MasterDataSourceConfig(

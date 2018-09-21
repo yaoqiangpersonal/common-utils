@@ -3,6 +3,7 @@ package com.yq.blueray.common.base.impl.service;
 import com.yq.blueray.common.base.BaseService;
 import com.yq.blueray.common.base.impl.vo.AbstractVo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,7 +19,12 @@ public class AbstractService<T> implements BaseService<T> {
     }
 
     @Override
-    public int delete(T t) throws Exception {
+    public int addBatch(List<T> list) throws Exception {
+        return 0;
+    }
+
+    @Override
+    public int deleteById(Serializable id) throws Exception {
         return 0;
     }
 
@@ -27,10 +33,6 @@ public class AbstractService<T> implements BaseService<T> {
         return 0;
     }
 
-    @Override
-    public int addSelective(T t) throws Exception {
-        return 0;
-    }
 
     @Override
     public int updateSelective(T t) throws Exception {

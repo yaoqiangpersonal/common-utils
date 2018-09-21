@@ -1,5 +1,6 @@
 package com.yq.blueray.common.base;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.yq.blueray.common.base.impl.vo.AbstractVo;
@@ -38,11 +39,11 @@ public interface BaseService<T> {
 	 * 
 	 * 删除
 	 * 
-	 * @param t
+	 * @param id
 	 * @return
 	 * @throws Exception
 	 */
-	int delete(T t) throws Exception;
+	int deleteById(Serializable id) throws Exception;
 	
 	/**
 	 * 修改
@@ -52,15 +53,6 @@ public interface BaseService<T> {
 	 * @throws Exception
 	 */
 	int update(T t) throws Exception;
-	
-	/**
-	 * 选择性添加
-	 * 
-	 * @param t
-	 * @return
-	 * @throws Exception
-	 */
-	int addSelective(T t) throws Exception;
 	
 	/**
 	 * 选择性修改
