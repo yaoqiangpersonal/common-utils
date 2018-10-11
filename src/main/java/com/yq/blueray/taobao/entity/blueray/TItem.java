@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * @since 2018-09-19
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class TItem{
 

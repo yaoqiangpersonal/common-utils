@@ -1,0 +1,145 @@
+package com.yq.blueray.crawler.processor;
+
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yq.blueray.crawler.po.Bluray;
+import org.apache.commons.lang3.StringUtils;
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.selector.Selectable;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
+public class CamelProcessor implements PageProcessor {
+
+	private Site site = Site.me()
+			.setRetryTimes(3)
+			.setSleepTime(500)
+			.setTimeOut(5000);
+
+	//更新mapper
+	private final BaseMapper<Bluray> mapper;
+
+	private final Map<String,BigDecimal> acceptablePrice;
+
+	private final List<String> list = new LinkedList<>();
+	private final Pattern p = Pattern.compile("\\d+");
+
+	public CamelProcessor(BaseMapper<Bluray> mapper,Map<String,BigDecimal> acceptablePrice){
+		this.acceptablePrice = acceptablePrice;
+		this.mapper = mapper;
+	}
+
+	public List<String> getList(){
+		return list;
+	}
+
+	@Override
+    public void process(Page page) {
+		Html html = page.getHtml();
+		Bluray b = new Bluray();
+
+		String url = page.getUrl().get();
+		String asin = url.substring(url.lastIndexOf("/") +1,url.length());
+		b.setAsin(asin);
+
+		Selectable tbody = html.$("#section_amazon .pad .product_pane tbody");
+
+		String sPrice = tbody.$("tr:eq(0)").$("td:eq(1)").get();
+		BigDecimal currentPrice = bigCreate(priceHandler(sPrice));
+		System.out.println("CurrentPrice:" + sPrice);
+        b.setCurrentPrice(bigCreate(priceHandler(sPrice)));
+
+		sPrice = tbody.$("tr.highest_price td:eq(1)").get();
+		System.out.println("HighestPrice:" + sPrice);
+		b.setHighestPrice(bigCreate(priceHandler(sPrice)));
+
+		sPrice = tbody.$("tr.lowest_price td:eq(1)").get();
+		System.out.println("LowestPrice:" + sPrice);
+		BigDecimal lowestPrice = bigCreate(priceHandler(sPrice));
+		if(priceCompare(lowestPrice,currentPrice,url)) {
+			System.out.println("lowestPrice" + lowestPrice + ":currentPrice" + currentPrice);
+			list.add(asin);
+		};
+		b.setLowestPrice(bigCreate(priceHandler(sPrice)));
+		b.setUpdateTime(new Date(System.currentTimeMillis()));
+		mapper.update(b,createWrapper(b));
+
+    }
+
+	/**
+	 * 判定规则
+	 *
+	 * @param lowestPrice 最低价格
+	 * @param currentPrice 最高价格
+	 * @param url 网页链接
+	 * @return
+	 */
+    private boolean priceCompare(BigDecimal lowestPrice,BigDecimal currentPrice,String url){
+		System.out.println("lowestPrice" + lowestPrice + " :currentPrice" + currentPrice + " :acceptablePrice" +acceptablePrice.get(url));
+		return currentPrice.subtract(lowestPrice).divide(lowestPrice,5, RoundingMode.HALF_EVEN).compareTo(new BigDecimal(0.15))
+				>=1 || lowestPrice.compareTo(acceptablePrice.get(url)) >= 1;
+	}
+
+	/**
+	 * 创建更新条件
+	 *
+	 * @param asin
+	 *
+	 * @return
+	 */
+    private Wrapper<Bluray> createWrapper(Bluray asin){
+		UpdateWrapper<Bluray> wrapper = new UpdateWrapper<>();
+		wrapper.eq("asin",asin.getAsin());
+		return wrapper;
+	}
+
+	/**
+	 * 通过String 创建 bigDecimal
+	 *
+	 * @param s
+	 *
+	 * @return
+	 */
+    private BigDecimal bigCreate(String s){
+		if(StringUtils.isNotBlank(s))
+			return new BigDecimal(s);
+		return null;
+	}
+
+	/**
+	 * 价格处理
+	 *
+	 * @param s
+	 * @return
+	 */
+    private String priceHandler(String s){
+		Matcher m = p.matcher(s);
+		if (StringUtils.isNotBlank(s) && m.find())
+			return s.replaceAll("[$€£]", "").replaceAll(",", ".").replaceAll("<.+?>", "");
+		return null;
+	}
+
+	/**
+	 * site设置
+	 *
+	 * @return
+	 */
+	@Override
+	public Site getSite() {
+		site.addHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36");
+		return site;
+	}
+}

@@ -1,6 +1,9 @@
 package com.yq.blueray.crawler.service;
 
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.yq.blueray.crawler.po.Bluray;
+
 import java.util.List;
 
 /**
@@ -8,6 +11,6 @@ import java.util.List;
  * @Date: 2018-09-21 11:47
  * @Description:
  */
-public interface CamelService {
-
+public interface CamelService extends IService<Bluray> {
+    void crawlerImportant() throws Exception;
 }

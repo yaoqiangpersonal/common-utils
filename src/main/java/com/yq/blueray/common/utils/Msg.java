@@ -1,6 +1,7 @@
 package com.yq.blueray.common.utils;
 
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,8 @@ public class Msg {
 	public static Msg fail(){
 		return new Msg(404,"处理失败！");
 	}
-	
+
+
 	public Msg add(final String key,final Object value){
 		extend.put(key, value);
 		return this;

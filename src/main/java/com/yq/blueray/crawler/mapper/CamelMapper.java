@@ -1,8 +1,12 @@
 package com.yq.blueray.crawler.mapper;
 
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yq.blueray.crawler.po.Bluray;
 import org.apache.ibatis.annotations.Mapper;
-import po.Bluray;
+
+
+import java.io.PrintStream;
 
 /**
  * @Auther: yq
@@ -11,4 +15,5 @@ import po.Bluray;
  */
 @Mapper
 public interface CamelMapper extends BaseMapper<Bluray> {
+
 }

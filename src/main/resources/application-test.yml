@@ -43,7 +43,8 @@ mybatis:
 
 #服务器设置
 server:
-  port: 8080
+  port: 8081
+
 multipart:
   maxFileSize: 10Mb
   maxRequestSize: 50Mb
@@ -58,6 +59,13 @@ logging:
     org.springframework.web: debug
     com.howtodoinjava: INFO
     org.hibernate: ERROR
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
 #最大连接数
 http:
   maxTotal: 100

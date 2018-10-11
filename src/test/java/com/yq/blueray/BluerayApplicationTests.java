@@ -1,8 +1,13 @@
 package com.yq.blueray;
 
-import com.yq.blueray.crawler.service.impl.CamelServiceImpl;
-import com.yq.blueray.taobao.entity.blueray.TItem;
-import com.yq.blueray.taobao.mapper.blueray.TItemMapper;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import com.yq.blueray.crawler.po.Bluray;
+
+import com.yq.blueray.crawler.service.CamelService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +21,31 @@ import java.util.List;
 public class BluerayApplicationTests {
 
     @Autowired
-    private CamelServiceImpl camelService;
+    private CamelService camelService;
 
     @Test
     public void contextLoads() {
-        camelService.crawlerAll();
+
+        try {
+            camelService.crawlerImportant();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     *
+     * 创造条件
+     *
+     * @return
+     */
+    private Wrapper<Bluray> createWrapper(){
+        QueryWrapper<Bluray> camelQueryWrapper = new QueryWrapper<>();
+        camelQueryWrapper.eq("state","Germany");
+        camelQueryWrapper.isNotNull("asin");
+        camelQueryWrapper.orderByDesc("update_time");
+        return camelQueryWrapper;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.yq.blueray.taobao.mapper.sqlserver;
 
+import com.yq.blueray.crawler.po.Bluray;
 import org.apache.ibatis.annotations.Mapper;
-import po.Bluray;
 
 import java.util.List;
 
