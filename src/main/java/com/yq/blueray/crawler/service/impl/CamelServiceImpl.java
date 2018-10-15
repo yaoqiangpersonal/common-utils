@@ -41,23 +41,45 @@ public class CamelServiceImpl extends ServiceImpl<CamelMapper, Bluray> implement
 
     public void crawlerImportant() throws Exception{
         List<Bluray> list = camelMapper.selectList(createWrapper());
-        Map<String,BigDecimal> acceptablePrice = readyBlurayUrls(list);
-        List<String> shouldBuy = crawler(acceptablePrice);
+        crawlerList(list);
+    }
+
+    public void crawlerAll() throws Exception{
+        List<Bluray> list = camelMapper.selectList(null);
+        crawlerList(list);
+    }
+
+    private void crawlerList(List<Bluray> list) throws Exception{
+        Map<String,Bluray> blurayMap = readyBlurayUrls(list);
+        Map<String,List<Bluray>> shouldBuy = crawler(blurayMap);
+        StringBuilder sb = new StringBuilder(1000);
+        sb.append("这是测试");
+        Set<String> set = shouldBuy.keySet();
+
+        set.forEach(s->{
+            sb.append("\r\n" + s + ":\r\n");
+            shouldBuy.get(s).forEach(b->{
+                sb.append("国家:" + b.getState() + " asin:" + b.getAsin() + " 现在价格:" + b.getCurrentPrice() + " 最低价格: " + b.getLowestPrice()+ " 接受价格:" + b.getAcceptablePrice()  +"\r\n");
+            });
+        });
+        atEmployee(sb.toString());
     }
 
 
-    private List<String> crawler(Map<String,BigDecimal> acceptablePrice){
+    private Map<String,List<Bluray>> crawler(Map<String,Bluray> blurayMap){
         System.setProperty("https.protocols", "TLSv1.2");
         long startTime, endTime;
         System.out.println("开始爬取...");
         startTime = System.currentTimeMillis();
-        CamelProcessor camelProcessor = new CamelProcessor(camelMapper,acceptablePrice);
-        Spider.create(camelProcessor).thread(5).startUrls(new ArrayList<>(acceptablePrice.keySet())).run();
-        System.out.println(camelProcessor.getList());
+        CamelProcessor camelProcessor = new CamelProcessor(camelMapper,blurayMap);
+        Spider.create(camelProcessor).thread(5).startUrls(new ArrayList<>(blurayMap.keySet())).run();
+        Map<String,List<Bluray>> map = new HashMap<>();
+        map.put("到达接受价格",camelProcessor.getAcceptablePrice());
+        map.put("符合(最低价*1.05>现价)",camelProcessor.getProportionatelist());
         endTime = System.currentTimeMillis();
-        String msg = "爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒，抓取了"+acceptablePrice.size()+"条记录";
+        String msg = "爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒，抓取了"+blurayMap.size()+"条记录";
         System.out.println(msg);
-        return camelProcessor.getList();
+        return map;
     }
 
     /**
@@ -66,16 +88,17 @@ public class CamelServiceImpl extends ServiceImpl<CamelMapper, Bluray> implement
      * @param list 集合
      * @return 返回urls
      */
-    private Map<String,BigDecimal> readyBlurayUrls(List<? extends Bluray> list){
-        Map<String,BigDecimal> urlsAndPrice = new HashMap<>();
-        list.forEach(b-> urlsAndPrice.put(AmazonPrefix.fromState(b.getState()).getPrefix() + b.getAsin(),b.getAcceptablePrice()));
+    private Map<String,Bluray> readyBlurayUrls(List<? extends Bluray> list){
+        Map<String,Bluray> urlsAndPrice = new HashMap<>();
+        list.forEach(b-> urlsAndPrice.put(AmazonPrefix.fromState(b.getState()).getPrefix() + b.getAsin(),b));
         return urlsAndPrice;
     }
+
     /**
-     * 通知龙姐姐，爬取完成
+     * 调用相对应的方法发送消息
      */
     private void atEmployee(String msg){
-        dingdingService.sendMessageToProgram(msg,"15281143071",false);
+        dingdingService.priceAlarm(msg);
     }
 
 
@@ -92,5 +115,4 @@ public class CamelServiceImpl extends ServiceImpl<CamelMapper, Bluray> implement
         camelQueryWrapper.orderByDesc("update_time");
         return camelQueryWrapper;
     }
-
 }

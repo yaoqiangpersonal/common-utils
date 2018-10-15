@@ -18,6 +18,6 @@ public class DingdingProcessor {
     public String crawlerFinished(){
         String phone = "15281143071";
         String context = "测试";
-        return dingdingService.sendMessageToProgram(context,phone,false);
+        return null;
     }
 }

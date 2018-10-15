@@ -32,18 +32,24 @@ public class CamelProcessor implements PageProcessor {
 	//更新mapper
 	private final BaseMapper<Bluray> mapper;
 
-	private final Map<String,BigDecimal> acceptablePrice;
+	private final Map<String,Bluray> blurays;
 
-	private final List<String> list = new LinkedList<>();
+	private final List<Bluray> isProportionatelist = new LinkedList<>();
+	private final List<Bluray> isAcceptablePrice = new LinkedList<>();
+
 	private final Pattern p = Pattern.compile("\\d+");
 
-	public CamelProcessor(BaseMapper<Bluray> mapper,Map<String,BigDecimal> acceptablePrice){
-		this.acceptablePrice = acceptablePrice;
+	public CamelProcessor(BaseMapper<Bluray> mapper,Map<String,Bluray> blurays){
+		this.blurays = blurays;
 		this.mapper = mapper;
 	}
 
-	public List<String> getList(){
-		return list;
+	public List<Bluray> getProportionatelist(){
+		return isProportionatelist;
+	}
+
+	public List<Bluray> getAcceptablePrice(){
+		return isAcceptablePrice;
 	}
 
 	@Override
@@ -59,39 +65,55 @@ public class CamelProcessor implements PageProcessor {
 
 		String sPrice = tbody.$("tr:eq(0)").$("td:eq(1)").get();
 		BigDecimal currentPrice = bigCreate(priceHandler(sPrice));
-		System.out.println("CurrentPrice:" + sPrice);
+		//System.out.println("CurrentPrice:" + sPrice);
         b.setCurrentPrice(bigCreate(priceHandler(sPrice)));
 
 		sPrice = tbody.$("tr.highest_price td:eq(1)").get();
-		System.out.println("HighestPrice:" + sPrice);
+		//System.out.println("HighestPrice:" + sPrice);
 		b.setHighestPrice(bigCreate(priceHandler(sPrice)));
 
 		sPrice = tbody.$("tr.lowest_price td:eq(1)").get();
-		System.out.println("LowestPrice:" + sPrice);
+		//System.out.println("LowestPrice:" + sPrice);
 		BigDecimal lowestPrice = bigCreate(priceHandler(sPrice));
-		if(priceCompare(lowestPrice,currentPrice,url)) {
-			System.out.println("lowestPrice" + lowestPrice + ":currentPrice" + currentPrice);
-			list.add(asin);
-		};
+
+		if(isAcceptablePrice(currentPrice,url)) {
+			isAcceptablePrice.add(blurays.get(url));
+		}else if(isProportionate(lowestPrice,currentPrice)){
+			isProportionatelist.add(blurays.get(url));
+		}
+
 		b.setLowestPrice(bigCreate(priceHandler(sPrice)));
 		b.setUpdateTime(new Date(System.currentTimeMillis()));
 		mapper.update(b,createWrapper(b));
-
     }
 
 	/**
-	 * 判定规则
+	 * 符合比例
 	 *
 	 * @param lowestPrice 最低价格
 	 * @param currentPrice 最高价格
-	 * @param url 网页链接
 	 * @return
 	 */
-    private boolean priceCompare(BigDecimal lowestPrice,BigDecimal currentPrice,String url){
-		System.out.println("lowestPrice" + lowestPrice + " :currentPrice" + currentPrice + " :acceptablePrice" +acceptablePrice.get(url));
-		return currentPrice.subtract(lowestPrice).divide(lowestPrice,5, RoundingMode.HALF_EVEN).compareTo(new BigDecimal(0.15))
-				>=1 || lowestPrice.compareTo(acceptablePrice.get(url)) >= 1;
+    private boolean isProportionate(BigDecimal lowestPrice,BigDecimal currentPrice){
+    	if(lowestPrice != null && currentPrice != null)
+			return currentPrice.divide(lowestPrice,5, RoundingMode.HALF_EVEN).compareTo(new BigDecimal(1.05))<1;
+    	return false;
 	}
+
+	/**
+	 * 符合可接受价格
+	 *
+	 * @param currentPrice
+	 * @param url
+	 * @return
+	 */
+	private boolean isAcceptablePrice(BigDecimal currentPrice,String url){
+		BigDecimal b = blurays.get(url).getAcceptablePrice();
+		if(currentPrice != null && b != null)
+			return currentPrice.compareTo(b) >= 1;
+		return false;
+	}
+
 
 	/**
 	 * 创建更新条件

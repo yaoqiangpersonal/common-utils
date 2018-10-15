@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
 
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>blueray</name>
 
@@ -164,6 +164,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
             </plugin>
 
             <!-- mybatis 逆向工程 -->

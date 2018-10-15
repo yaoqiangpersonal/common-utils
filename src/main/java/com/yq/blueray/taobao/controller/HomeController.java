@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2018-09-13 18:10
  * @Description:
  */
-@RestController
+@Controller
 public class HomeController {
 
-    @RequestMapping("gotoUpload")
+    @RequestMapping("index")
     public String upload(){
-        return "upload";
+        return "index";
     }
 
     @RequestMapping("/hello")

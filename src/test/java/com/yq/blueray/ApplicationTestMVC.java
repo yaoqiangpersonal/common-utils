@@ -1,0 +1,79 @@
+package com.yq.blueray;
+
+
+import com.yq.blueray.crawler.po.Bluray;
+import com.yq.blueray.crawler.vo.CamelVo;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.alibaba.fastjson.JSON;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc // 注入MockMvc
+public class ApplicationTestMVC {
+
+    @Autowired
+    private MockMvc mvc;
+
+    //url
+    private String url;
+
+    //参数
+    private Object params;
+
+    //返回结果
+    private MvcResult mvcResult;
+
+    @Test
+    public void mvcTest() throws Exception {
+        url = "/camel/crawlerImportant";
+
+        paramsCreate();
+
+        mvcCreate();
+
+        resultHandler();
+    }
+
+    private void paramsCreate() {
+        Bluray b = new Bluray();
+        b.setAsin("B000IOM0WE");
+        CamelVo vo = new CamelVo();
+        vo.setPage(1);
+        vo.setLimit(12);
+        vo.setInstance(b);
+        params = vo;
+    }
+
+    private void mvcCreate() throws Exception {
+        /* 构建request 发送请求GET请求
+         * MockMvcRequestBuilders 中有很多 请求方式。像get、post、put、delete等等
+         */
+        mvcResult = mvc.perform(MockMvcRequestBuilders.put(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(JSON.toJSONString(params))
+                .accept(MediaType.APPLICATION_JSON)) // 断言返回结果是json
+                .andReturn();// 得到返回结果
+    }
+
+    private void resultHandler() throws Exception {
+        MockHttpServletResponse response = mvcResult.getResponse();
+        //拿到请求返回码
+        int status = response.getStatus();
+        //拿到结果
+        String contentAsString = response.getContentAsString();
+
+        System.err.println(status);
+        System.err.println(contentAsString);
+    }
+}

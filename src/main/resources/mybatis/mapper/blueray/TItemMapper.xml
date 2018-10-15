@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yq.blueray.taobao.dao.blueray.TItemMapper">
+  <resultMap id="BaseResultMap" type="com.yq.blueray.taobao.entity.blueray.TItem">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="buy_number" jdbcType="INTEGER" property="buyNumber" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="property" jdbcType="VARCHAR" property="property" />
+    <result column="package_information" jdbcType="VARCHAR" property="packageInformation" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="order_state" jdbcType="VARCHAR" property="orderState" />
+    <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+    <result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
+    <result column="cost_average_price" jdbcType="DOUBLE" property="costAveragePrice" />
+    <result column="cd_stock" jdbcType="INTEGER" property="cdStock" />
+    <result column="barcode" jdbcType="VARCHAR" property="barcode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bid, shop_name, order_number, title, price, buy_number, sku, property, package_information, 
+    remarks, order_state, update_time, discount_price, cost_average_price, cd_stock, 
+    barcode
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item (bid, shop_name, order_number, 
+      title, price, buy_number, 
+      sku, property, package_information, 
+      remarks, order_state, update_time, 
+      discount_price, cost_average_price, cd_stock, 
+      barcode)
+    values (#{bid,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{buyNumber,jdbcType=INTEGER}, 
+      #{sku,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR}, #{packageInformation,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{orderState,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, 
+      #{discountPrice,jdbcType=DOUBLE}, #{costAveragePrice,jdbcType=DOUBLE}, #{cdStock,jdbcType=INTEGER}, 
+      #{barcode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="orderNumber != null">
+        order_number,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="buyNumber != null">
+        buy_number,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="property != null">
+        property,
+      </if>
+      <if test="packageInformation != null">
+        package_information,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="orderState != null">
+        order_state,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="discountPrice != null">
+        discount_price,
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price,
+      </if>
+      <if test="cdStock != null">
+        cd_stock,
+      </if>
+      <if test="barcode != null">
+        barcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        #{bid,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    <set>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        buy_number = #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        property = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        package_information = #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        order_state = #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        discount_price = #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        cd_stock = #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    set shop_name = #{shopName,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      buy_number = #{buyNumber,jdbcType=INTEGER},
+      sku = #{sku,jdbcType=VARCHAR},
+      property = #{property,jdbcType=VARCHAR},
+      package_information = #{packageInformation,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=BIGINT},
+      discount_price = #{discountPrice,jdbcType=DOUBLE},
+      cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      cd_stock = #{cdStock,jdbcType=INTEGER},
+      barcode = #{barcode,jdbcType=VARCHAR}
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.yq.blueray.taobao.entity.blueray.TItem">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="buy_number" jdbcType="INTEGER" property="buyNumber" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="property" jdbcType="VARCHAR" property="property" />
+    <result column="package_information" jdbcType="VARCHAR" property="packageInformation" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="order_state" jdbcType="VARCHAR" property="orderState" />
+    <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+    <result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
+    <result column="cost_average_price" jdbcType="DOUBLE" property="costAveragePrice" />
+    <result column="cd_stock" jdbcType="INTEGER" property="cdStock" />
+    <result column="barcode" jdbcType="VARCHAR" property="barcode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bid, shop_name, order_number, title, price, buy_number, sku, property, package_information, 
+    remarks, order_state, update_time, discount_price, cost_average_price, cd_stock, 
+    barcode
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item (bid, shop_name, order_number, 
+      title, price, buy_number, 
+      sku, property, package_information, 
+      remarks, order_state, update_time, 
+      discount_price, cost_average_price, cd_stock, 
+      barcode)
+    values (#{bid,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{buyNumber,jdbcType=INTEGER}, 
+      #{sku,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR}, #{packageInformation,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{orderState,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, 
+      #{discountPrice,jdbcType=DOUBLE}, #{costAveragePrice,jdbcType=DOUBLE}, #{cdStock,jdbcType=INTEGER}, 
+      #{barcode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="orderNumber != null">
+        order_number,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="buyNumber != null">
+        buy_number,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="property != null">
+        property,
+      </if>
+      <if test="packageInformation != null">
+        package_information,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="orderState != null">
+        order_state,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="discountPrice != null">
+        discount_price,
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price,
+      </if>
+      <if test="cdStock != null">
+        cd_stock,
+      </if>
+      <if test="barcode != null">
+        barcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        #{bid,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    <set>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        buy_number = #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        property = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        package_information = #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        order_state = #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        discount_price = #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        cd_stock = #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    set shop_name = #{shopName,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      buy_number = #{buyNumber,jdbcType=INTEGER},
+      sku = #{sku,jdbcType=VARCHAR},
+      property = #{property,jdbcType=VARCHAR},
+      package_information = #{packageInformation,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=BIGINT},
+      discount_price = #{discountPrice,jdbcType=DOUBLE},
+      cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      cd_stock = #{cdStock,jdbcType=INTEGER},
+      barcode = #{barcode,jdbcType=VARCHAR}
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.yq.blueray.taobao.entity.blueray.TItem">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="buy_number" jdbcType="INTEGER" property="buyNumber" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="property" jdbcType="VARCHAR" property="property" />
+    <result column="package_information" jdbcType="VARCHAR" property="packageInformation" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="order_state" jdbcType="VARCHAR" property="orderState" />
+    <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+    <result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
+    <result column="cost_average_price" jdbcType="DOUBLE" property="costAveragePrice" />
+    <result column="cd_stock" jdbcType="INTEGER" property="cdStock" />
+    <result column="barcode" jdbcType="VARCHAR" property="barcode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bid, shop_name, order_number, title, price, buy_number, sku, property, package_information, 
+    remarks, order_state, update_time, discount_price, cost_average_price, cd_stock, 
+    barcode
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item (bid, shop_name, order_number, 
+      title, price, buy_number, 
+      sku, property, package_information, 
+      remarks, order_state, update_time, 
+      discount_price, cost_average_price, cd_stock, 
+      barcode)
+    values (#{bid,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{buyNumber,jdbcType=INTEGER}, 
+      #{sku,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR}, #{packageInformation,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{orderState,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, 
+      #{discountPrice,jdbcType=DOUBLE}, #{costAveragePrice,jdbcType=DOUBLE}, #{cdStock,jdbcType=INTEGER}, 
+      #{barcode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="orderNumber != null">
+        order_number,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="buyNumber != null">
+        buy_number,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="property != null">
+        property,
+      </if>
+      <if test="packageInformation != null">
+        package_information,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="orderState != null">
+        order_state,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="discountPrice != null">
+        discount_price,
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price,
+      </if>
+      <if test="cdStock != null">
+        cd_stock,
+      </if>
+      <if test="barcode != null">
+        barcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        #{bid,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    <set>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        buy_number = #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        property = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        package_information = #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        order_state = #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        discount_price = #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        cd_stock = #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    set shop_name = #{shopName,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      buy_number = #{buyNumber,jdbcType=INTEGER},
+      sku = #{sku,jdbcType=VARCHAR},
+      property = #{property,jdbcType=VARCHAR},
+      package_information = #{packageInformation,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=BIGINT},
+      discount_price = #{discountPrice,jdbcType=DOUBLE},
+      cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      cd_stock = #{cdStock,jdbcType=INTEGER},
+      barcode = #{barcode,jdbcType=VARCHAR}
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.yq.blueray.taobao.entity.blueray.TItem">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="buy_number" jdbcType="INTEGER" property="buyNumber" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="property" jdbcType="VARCHAR" property="property" />
+    <result column="package_information" jdbcType="VARCHAR" property="packageInformation" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="order_state" jdbcType="VARCHAR" property="orderState" />
+    <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+    <result column="discount_price" jdbcType="DOUBLE" property="discountPrice" />
+    <result column="cost_average_price" jdbcType="DOUBLE" property="costAveragePrice" />
+    <result column="cd_stock" jdbcType="INTEGER" property="cdStock" />
+    <result column="barcode" jdbcType="VARCHAR" property="barcode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bid, shop_name, order_number, title, price, buy_number, sku, property, package_information, 
+    remarks, order_state, update_time, discount_price, cost_average_price, cd_stock, 
+    barcode
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_item
+    where bid = #{bid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item (bid, shop_name, order_number, 
+      title, price, buy_number, 
+      sku, property, package_information, 
+      remarks, order_state, update_time, 
+      discount_price, cost_average_price, cd_stock, 
+      barcode)
+    values (#{bid,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{buyNumber,jdbcType=INTEGER}, 
+      #{sku,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR}, #{packageInformation,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{orderState,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, 
+      #{discountPrice,jdbcType=DOUBLE}, #{costAveragePrice,jdbcType=DOUBLE}, #{cdStock,jdbcType=INTEGER}, 
+      #{barcode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    insert into t_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="orderNumber != null">
+        order_number,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="buyNumber != null">
+        buy_number,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="property != null">
+        property,
+      </if>
+      <if test="packageInformation != null">
+        package_information,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="orderState != null">
+        order_state,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="discountPrice != null">
+        discount_price,
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price,
+      </if>
+      <if test="cdStock != null">
+        cd_stock,
+      </if>
+      <if test="barcode != null">
+        barcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bid != null">
+        #{bid,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    <set>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="buyNumber != null">
+        buy_number = #{buyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null">
+        property = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="packageInformation != null">
+        package_information = #{packageInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        order_state = #{orderState,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="discountPrice != null">
+        discount_price = #{discountPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="costAveragePrice != null">
+        cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cdStock != null">
+        cd_stock = #{cdStock,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yq.blueray.taobao.entity.blueray.TItem">
+    update t_item
+    set shop_name = #{shopName,jdbcType=VARCHAR},
+      order_number = #{orderNumber,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      buy_number = #{buyNumber,jdbcType=INTEGER},
+      sku = #{sku,jdbcType=VARCHAR},
+      property = #{property,jdbcType=VARCHAR},
+      package_information = #{packageInformation,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=BIGINT},
+      discount_price = #{discountPrice,jdbcType=DOUBLE},
+      cost_average_price = #{costAveragePrice,jdbcType=DOUBLE},
+      cd_stock = #{cdStock,jdbcType=INTEGER},
+      barcode = #{barcode,jdbcType=VARCHAR}
+    where bid = #{bid,jdbcType=INTEGER}
+  </update>
+</mapper>

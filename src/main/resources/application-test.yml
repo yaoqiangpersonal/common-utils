@@ -1,24 +1,28 @@
 spring:
   datasource:
-      dynamic:
-        mp-enabled: true #默认为false，不要随便开启，有微小的性能损失
-        primary: master #设置默认的数据源或者数据源组,默认值即为master,如果你主从默认下主库的名称就是master可不定义此项。
-        datasource:
-          master:
-            username: root
-            password: root123456
-            driver-class-name: com.mysql.jdbc.Driver
-            url: jdbc:mysql://localhost:3306/blueray?useUnicode=true&characterEncoding=utf8
-          sqlserver:
-            username: sa
-            password: nankai.2017
-            driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-            url: jdbc:sqlserver://192.168.1.200:1433;Database=mpdisk
+    #禁用webstatFilter,druid配置的filter未初始化在mvc测试会产生空指针异常
+    druid.web-stat-filter.enabled: false
+    dynamic:
+      #默认为false，不要随便开启，有微小的性能损失
+      mp-enabled: true
+      #设置默认的数据源或者数据源组,默认值即为master,如果你主从默认下主库的名称就是master可不定义此项。
+      primary: master
+      datasource:
+        master:
+          username: root
+          password: root123456
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/blueray?useUnicode=true&characterEncoding=utf8
+        sqlserver:
+          username: sa
+          password: nankai.2017
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+          url: jdbc:sqlserver://192.168.1.200:1433;Database=mpdisk
   autoconfigure:
     exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   thymeleaf:
     cache: false
-    prefix: classpath:templates/html/
+    prefix: classpath:/templates/
     check-template-location: true
     suffix: .html
     encoding: UTF-8
@@ -30,11 +34,6 @@ spring:
         enabled: true
         resolve-lazily: true
         max-file-size: 100MB
-
-  mvc:
-    static-path-pattern: /static/**
-
-  resources: classpath:/static/**
 
 #指定mybatis映射文件的地址
 mybatis:

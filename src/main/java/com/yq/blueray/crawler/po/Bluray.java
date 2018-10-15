@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -34,6 +35,8 @@ public class Bluray {
     private BigDecimal highestPrice;
     private BigDecimal lowestPrice;
     private Date updateTime;
+    @NotNull
     private Integer important;
+    @NotNull
     private BigDecimal acceptablePrice;
 }

@@ -1,1 +1,0 @@
-var projectPath = location.protocol + "//" + location.host;

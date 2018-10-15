@@ -13,4 +13,5 @@ import java.util.List;
  */
 public interface CamelService extends IService<Bluray> {
     void crawlerImportant() throws Exception;
+    void crawlerAll() throws Exception;
 }

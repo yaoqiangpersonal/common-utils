@@ -63,10 +63,9 @@ public abstract class AbstractDingdingService implements DingdingService {
         }
     }
 
-    @Override
-    public String sendMessageToProgram(String context,String phone,boolean atAll){
+    public String sendMessageByRobotToken(String context,String phone,boolean atAll,String token){
         try {
-            return dingdingnotice(ROBOT_URL + PROGRAM_TOKEN,context,phone,atAll);
+            return dingdingnotice(ROBOT_URL + token,context,phone,atAll);
         } catch (Exception e) {
             e.printStackTrace();
         }

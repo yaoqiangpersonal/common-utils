@@ -22,9 +22,11 @@ public interface DingdingService  {
 
     String PROGRAM_TOKEN = "b64c176b2ffcd4570ca0ec20abd828ffc9d524aa74b8ee2e4462167c46f10a63";
 
+    String PRICE_ALARM = "7c0d38663670f9f4f4e3a8a6c937916d9c764c3a76b2f4545a763d442810bc29";
 
     String sendMessageToOne(String sender, String cid, OapiMessageSendToConversationRequest.Msg msg);
 
-    String sendMessageToProgram(String context, String phone, boolean atAll);
+    String sendMessageByRobotToken(String context,String phone,boolean atAll,String token);
 
+    void priceAlarm(String msg);
 }

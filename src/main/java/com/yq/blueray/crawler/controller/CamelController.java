@@ -12,6 +12,7 @@ import com.yq.blueray.crawler.po.Bluray;
 import com.yq.blueray.crawler.service.CamelService;
 import com.yq.blueray.crawler.vo.CamelVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,15 +32,24 @@ public class CamelController {
     @PostMapping("/findCamelByVo")
     public Msg findCamelByVo(@RequestBody CamelVo vo){
         PageHelper.startPage(vo.getPage(), vo.getLimit());
-        Wrapper<Bluray> wrapper = createWrapper(vo.getInstance().getAsin());
+        Wrapper<Bluray> wrapper = createWrapper(vo.getInstance());
         List<Bluray> list  = camelService.list(wrapper);
         PageInfo<Bluray> pageInfo= new PageInfo<Bluray>(list);
         return Msg.success().add("info",pageInfo);
     }
 
+    @PutMapping("/crawlerImportant")
+    public void crawlerImportant() throws Exception{
+        camelService.crawlerImportant();
+    }
+
+    @PutMapping("/crawlerAll")
+    public void crawlerAll() throws Exception{
+        camelService.crawlerAll();
+    }
 
     @PostMapping("/updateAcceptablePrice")
-    public Msg updateAcceptablePrice(@RequestBody Bluray bluray){
+    public Msg updateAcceptablePrice(@RequestBody @Validated Bluray bluray){
         Boolean b  = camelService.updateById(bluray);
         if(b)
             return Msg.success();
@@ -52,11 +62,12 @@ public class CamelController {
      *
      * @return
      */
-    private Wrapper<Bluray> createWrapper(String asin){
+    private Wrapper<Bluray> createWrapper(Bluray b){
         QueryWrapper<Bluray> camelQueryWrapper = new QueryWrapper<>();
-        //camelQueryWrapper.eq("state","Germany");
-        if(StringUtils.isNotEmpty(asin))
-            camelQueryWrapper.eq("asin",asin);
+        if(StringUtils.isNotEmpty(b.getAsin()))
+            camelQueryWrapper.eq("asin",b.getAsin());
+        if(b.getImportant() != null)
+            camelQueryWrapper.eq("important",b.getImportant());
         camelQueryWrapper.isNotNull("asin");
         camelQueryWrapper.orderByDesc("update_time");
 

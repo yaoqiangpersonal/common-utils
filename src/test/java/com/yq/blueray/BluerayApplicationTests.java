@@ -31,7 +31,6 @@ public class BluerayApplicationTests {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**
