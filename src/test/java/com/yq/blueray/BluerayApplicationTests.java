@@ -2,12 +2,12 @@ package com.yq.blueray;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 
 import com.yq.blueray.crawler.po.Bluray;
 
 import com.yq.blueray.crawler.service.CamelService;
+import com.yq.blueray.security.dao.UserDao;
+import com.yq.blueray.security.po.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,14 @@ import java.util.List;
 public class BluerayApplicationTests {
 
     @Autowired
-    private CamelService camelService;
+    private UserDao userDao;
 
     @Test
     public void contextLoads() {
 
         try {
-            camelService.crawlerImportant();
+            User u = userDao.getByUserName("admin");
+            System.out.println(u);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
 public class DingdingServiceImpl extends AbstractDingdingService {
 
     public void priceAlarm(String msg){
-        sendMessageByRobotToken(msg,"15182326275",false,PRICE_ALARM);
+        sendMessageByRobotToken(msg,"15281143071",false,PRICE_ALARM);
     }
 }

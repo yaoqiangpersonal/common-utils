@@ -29,7 +29,6 @@
     </properties>
 
 
-
     <dependencies>
 
         <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/sqljdbc4 -->
@@ -156,8 +155,20 @@
             <version>3.11.0</version>
         </dependency>
 
-    </dependencies>
+        <!--图像处理-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
 
+        <!--springsecurity 依赖jar-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <plugins>

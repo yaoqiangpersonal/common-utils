@@ -15,6 +15,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 public class WebMvcConfig extends WebMvcConfigurationSupport {
 
 
+    /**
+     * 跨域配置
+     *
+     * @param registry
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -29,6 +34,12 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         super.addInterceptors(registry);
     }
 
+
+    /**
+     * 注册静态资源
+     *
+     * @param registry
+     */
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");

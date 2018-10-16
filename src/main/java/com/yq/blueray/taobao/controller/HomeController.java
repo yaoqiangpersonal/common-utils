@@ -29,8 +29,4 @@ public class HomeController {
         return b;
     }
 
-    @RequestMapping("/login")
-    public void login(@RequestBody User user){
-        System.out.println(user);
-    }
 }

@@ -44,6 +44,11 @@ public class CamelServiceImpl extends ServiceImpl<CamelMapper, Bluray> implement
         crawlerList(list);
     }
 
+    public void crawlerUK() throws Exception{
+        List<Bluray> list = camelMapper.selectList(createWrapper());
+        crawlerList(list);
+    }
+
     public void crawlerAll() throws Exception{
         List<Bluray> list = camelMapper.selectList(null);
         crawlerList(list);
@@ -59,7 +64,7 @@ public class CamelServiceImpl extends ServiceImpl<CamelMapper, Bluray> implement
         set.forEach(s->{
             sb.append("\r\n" + s + ":\r\n");
             shouldBuy.get(s).forEach(b->{
-                sb.append("国家:" + b.getState() + " asin:" + b.getAsin() + " 现在价格:" + b.getCurrentPrice() + " 最低价格: " + b.getLowestPrice()+ " 接受价格:" + b.getAcceptablePrice()  +"\r\n");
+                sb.append("国家:" + AmazonPrefix.fromState(b.getState()).getChinese() + " asin:" + b.getAsin() + " 现在价格:" + b.getCurrentPrice() + " 最低价格: " + b.getLowestPrice()+ " 接受价格:" + b.getAcceptablePrice()  +"\r\n");
             });
         });
         atEmployee(sb.toString());
@@ -110,7 +115,7 @@ public class CamelServiceImpl extends ServiceImpl<CamelMapper, Bluray> implement
      */
     private Wrapper<Bluray> createWrapper(){
         QueryWrapper<Bluray> camelQueryWrapper = new QueryWrapper<>();
-        camelQueryWrapper.eq("important",1);
+        camelQueryWrapper.eq("state","United Kingdom");
         camelQueryWrapper.isNotNull("asin");
         camelQueryWrapper.orderByDesc("update_time");
         return camelQueryWrapper;

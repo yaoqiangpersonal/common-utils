@@ -3,6 +3,7 @@ package com.yq.blueray;
 
 import com.yq.blueray.crawler.po.Bluray;
 import com.yq.blueray.crawler.vo.CamelVo;
+import com.yq.blueray.security.po.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ApplicationTestMVC {
 
     @Test
     public void mvcTest() throws Exception {
-        url = "/camel/crawlerImportant";
+        url = "/login";
 
         paramsCreate();
 
@@ -46,13 +47,10 @@ public class ApplicationTestMVC {
     }
 
     private void paramsCreate() {
-        Bluray b = new Bluray();
-        b.setAsin("B000IOM0WE");
-        CamelVo vo = new CamelVo();
-        vo.setPage(1);
-        vo.setLimit(12);
-        vo.setInstance(b);
-        params = vo;
+        User b = new User();
+        b.setUsername("admin");
+        b.setPassword("admin");
+        params = b;
     }
 
     private void mvcCreate() throws Exception {

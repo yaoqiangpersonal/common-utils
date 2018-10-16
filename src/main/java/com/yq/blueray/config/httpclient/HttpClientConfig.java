@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @Auther: yq
  * @Date: 2018-09-20 18:04
- * @Description:
+ * @Description: httpclien自动注入
  */
 @Configuration
 public class HttpClientConfig {

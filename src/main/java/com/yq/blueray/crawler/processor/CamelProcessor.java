@@ -110,7 +110,7 @@ public class CamelProcessor implements PageProcessor {
 	private boolean isAcceptablePrice(BigDecimal currentPrice,String url){
 		BigDecimal b = blurays.get(url).getAcceptablePrice();
 		if(currentPrice != null && b != null)
-			return currentPrice.compareTo(b) >= 1;
+			return currentPrice.compareTo(b) <= 0;
 		return false;
 	}
 
