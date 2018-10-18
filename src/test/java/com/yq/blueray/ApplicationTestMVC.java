@@ -57,7 +57,7 @@ public class ApplicationTestMVC {
         /* 构建request 发送请求GET请求
          * MockMvcRequestBuilders 中有很多 请求方式。像get、post、put、delete等等
          */
-        mvcResult = mvc.perform(MockMvcRequestBuilders.put(url)
+        mvcResult = mvc.perform(MockMvcRequestBuilders.post(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(JSON.toJSONString(params))
                 .accept(MediaType.APPLICATION_JSON)) // 断言返回结果是json

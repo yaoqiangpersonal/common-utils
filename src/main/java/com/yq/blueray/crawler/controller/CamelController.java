@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public class CamelController {
     private CamelService camelService;
 
     @PostMapping("/findCamelByVo")
+    @RolesAllowed("CAMEL_GET")
     public Msg findCamelByVo(@RequestBody CamelVo vo){
         PageHelper.startPage(vo.getPage(), vo.getLimit());
         Wrapper<Bluray> wrapper = createWrapper(vo.getInstance());

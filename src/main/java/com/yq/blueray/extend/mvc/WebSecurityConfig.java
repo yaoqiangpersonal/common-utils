@@ -3,16 +3,24 @@ package com.yq.blueray.extend.mvc;
 
 import com.yq.blueray.extend.security.LoginAuthenticationProvider;
 import com.yq.blueray.extend.security.MyPasswordEncoder;
+import com.yq.blueray.extend.security.MyUsernamePasswordAuthenticationFilter;
 import com.yq.blueray.extend.security.UrlUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AnonymousAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 /**
@@ -25,6 +33,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(jsr250Enabled=true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -42,9 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .addFilterBefore(customUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
+                .antMatchers("/check").permitAll()
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -54,13 +65,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 //通过formlogin方法登录，并设置登录url
-                .formLogin().loginPage("/login")
+                //.formLogin().loginPage("/login")
                 //指定登录成功后跳转到/index页面
-                .defaultSuccessUrl("/user/success")
+                //.defaultSuccessUrl("/user/success")
                 //指定登录失败后跳转到/login?error页面
                 //.failureUrl("/login")
-                .permitAll()
-                .and()
+                //.permitAll()
+                //.and()
                 //开启cookie储存用户信息，并设置有效期为14天，指定cookie中的密钥
                 .rememberMe().tokenValiditySeconds(1209600).key("mykey")
                 .and()
@@ -70,6 +81,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
+    private MyUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() throws Exception {
+        MyUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter = new MyUsernamePasswordAuthenticationFilter("/user/success");
+        customUsernamePasswordAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
+        return customUsernamePasswordAuthenticationFilter;
+    }
+
     /**
      * 配置校验方式 和 密码策略 关闭异常处理
      *
@@ -77,13 +94,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth){
-        auth.authenticationProvider(
-                LoginAuthenticationProvider
-                        .custom(urlUserService,new MyPasswordEncoder())
-                        .setHideUserNotFoundExceptions(false)
-                        .build()
-        );
+        auth.authenticationProvider(LoginAuthenticationProvider
+                .custom(urlUserService,new MyPasswordEncoder())
+                .setHideUserNotFoundExceptions(false)
+                .build());
     }
+
 
     @Bean
     public SessionRegistry getSessionRegistry(){
