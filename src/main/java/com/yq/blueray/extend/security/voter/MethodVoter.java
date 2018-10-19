@@ -13,7 +13,7 @@ import java.util.Collection;
 /**
  * @Auther: yq
  * @Date: 2018-10-18 16:52
- * @Description:
+ * @Description: 方法投票器
  */
 public class MethodVoter implements AccessDecisionVoter<Object> {
 
@@ -29,6 +29,9 @@ public class MethodVoter implements AccessDecisionVoter<Object> {
 
     @Override
     public int vote(Authentication authentication, Object o, Collection<ConfigAttribute> collection) {
+        if(authentication == null)
+            return ACCESS_DENIED;
+
         HttpServletRequest request = ((FilterInvocation) o).getHttpRequest();
         String  method;
         for (GrantedAuthority ga : authentication.getAuthorities()) {

@@ -1,38 +1,27 @@
 package com.yq.blueray.extend.security;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
  * 权限实体
  */
+@Data
+@AllArgsConstructor
 public class UrlGrantedAuthority implements GrantedAuthority {
 
     private String permissionUrl;
     private String method;
+    private String authority;
 
-    public String getPermissionUrl() {
-        return permissionUrl;
-    }
-
-    public void setPermissionUrl(String permissionUrl) {
-        this.permissionUrl = permissionUrl;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public UrlGrantedAuthority (String permissionUrl, String method) {
-        this.permissionUrl = permissionUrl;
-        this.method = method;
-    }
-
+    /**
+     * 获取角色权限
+     *
+     * @return
+     */
     @Override
     public String getAuthority() {
-        return this.permissionUrl + ";"+this.method;
+        return authority;
     }
 }

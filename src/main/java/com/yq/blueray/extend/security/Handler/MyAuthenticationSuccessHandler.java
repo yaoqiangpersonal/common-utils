@@ -16,7 +16,7 @@ import java.io.Writer;
 /**
  * @Auther: yq
  * @Date: 2018-10-17 17:18
- * @Description:
+ * @Description: 认证成功处理器
  */
 public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 

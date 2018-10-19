@@ -16,7 +16,7 @@ import java.io.Writer;
 /**
  * @Auther: yq
  * @Date: 2018-10-18 10:06
- * @Description:
+ * @Description: 认证失败处理器
  */
 public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override

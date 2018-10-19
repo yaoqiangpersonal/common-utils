@@ -14,17 +14,20 @@ import java.io.IOException;
 /**
  * Created by yangyibo on 17/2/7.
  */
-@Service
+
 public class UrlFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
 
-    @Autowired
-    private FilterInvocationSecurityMetadataSource securityMetadataSource;
+    private SecurityMetadataSource securityMetadataSource;
 
-    @Autowired
+    public void setSecurityMetadataSource(SecurityMetadataSource securityMetadataSource) {
+        this.securityMetadataSource = securityMetadataSource;
+    }
+
     public void setUrlAccessDecisionManager(UrlAccessDecisionManager urlAccessDecisionManager) {
         super.setAccessDecisionManager(urlAccessDecisionManager);
     }
+
 
 
     @Override

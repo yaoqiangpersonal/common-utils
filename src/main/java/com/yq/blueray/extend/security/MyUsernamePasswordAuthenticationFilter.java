@@ -30,7 +30,7 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
 
     private String body;
 
-    public MyUsernamePasswordAuthenticationFilter(String successUrl) {
+    public MyUsernamePasswordAuthenticationFilter() {
 
         setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
         setAuthenticationSuccessHandler(new MyAuthenticationSuccessHandler());
