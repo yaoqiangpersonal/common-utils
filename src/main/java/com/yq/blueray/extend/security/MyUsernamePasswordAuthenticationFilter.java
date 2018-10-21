@@ -1,5 +1,6 @@
 package com.yq.blueray.extend.security;
 
+import com.yq.blueray.common.utils.JsonLoginUtil;
 import com.yq.blueray.extend.security.Handler.MyAuthenticationFailureHandler;
 import com.yq.blueray.extend.security.Handler.MyAuthenticationSuccessHandler;
 import com.yq.blueray.utils.JsonPathUtil;
@@ -8,10 +9,8 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.*;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,20 +30,16 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
     private String body;
 
     public MyUsernamePasswordAuthenticationFilter() {
-
-        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
-        setAuthenticationSuccessHandler(new MyAuthenticationSuccessHandler());
-        setAuthenticationFailureHandler(new MyAuthenticationFailureHandler());
     }
 
     @Override
     protected String obtainPassword(HttpServletRequest request) {
-        return get(getPasswordParameter(),request);
+        return JsonLoginUtil.getParams(request,getPasswordParameter());
     }
 
     @Override
     protected String obtainUsername(HttpServletRequest request) {
-        return get(getUsernameParameter(),request);
+        return JsonLoginUtil.getParams(request,getUsernameParameter());
     }
 
     /**
@@ -56,17 +51,7 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
      */
     private String get(String key,HttpServletRequest request){
         try {
-            //post请求，获取username和password
-            byte[] arr = IOUtils.toByteArray(request.getInputStream());
-            if(arr.length != 0)
-                body = new String(arr);
-            if(JsonPathUtil.isJson(body)) {
-                String namePath = "$." + key;
-                String result = JsonPathUtil.getByPath(body, namePath).toString();
-                return result;
-            }else{
-                return request.getParameter(key);
-            }
+            return JsonLoginUtil.getParams(request,key);
         } catch (Exception e) {
             logger.error("获取" + key + "出现问题，返回空");
             return "";

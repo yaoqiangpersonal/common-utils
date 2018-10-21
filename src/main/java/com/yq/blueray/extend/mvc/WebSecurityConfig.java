@@ -1,10 +1,9 @@
 package com.yq.blueray.extend.mvc;
 
 
-import com.yq.blueray.extend.security.LoginAuthenticationProvider;
-import com.yq.blueray.extend.security.MyPasswordEncoder;
-import com.yq.blueray.extend.security.MyUsernamePasswordAuthenticationFilter;
-import com.yq.blueray.extend.security.UrlUserService;
+import com.yq.blueray.extend.security.*;
+import com.yq.blueray.extend.security.Handler.MyAuthenticationFailureHandler;
+import com.yq.blueray.extend.security.Handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +18,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.sql.DataSource;
 
 
 /**
@@ -41,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SessionRegistry sessionRegistry;
 
+    @Autowired
+    private DataSource dataSource;
     /**
      * 权限配置
      *
@@ -51,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .addFilterBefore(customUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(customUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
@@ -73,7 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.permitAll()
                 //.and()
                 //开启cookie储存用户信息，并设置有效期为14天，指定cookie中的密钥
-                .rememberMe().tokenValiditySeconds(1209600).key("mykey")
+                .rememberMe()
+                    .tokenValiditySeconds(1209600)
+                    .rememberMeServices(rememberMeServices())
+                    .key("INTERNAL_SECRET_KEY")
                 .and()
                 .logout()
                 //指定登出的url
@@ -84,9 +94,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private MyUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() throws Exception {
         MyUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter = new MyUsernamePasswordAuthenticationFilter();
         customUsernamePasswordAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
+        customUsernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(new MyAuthenticationSuccessHandler());
+        customUsernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(new MyAuthenticationFailureHandler());
+        customUsernamePasswordAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
+        customUsernamePasswordAuthenticationFilter.setRememberMeServices(rememberMeServices());
         return customUsernamePasswordAuthenticationFilter;
     }
 
+
+    private RememberMeServices rememberMeServices(){
+        JdbcTokenRepositoryImpl rememberMeTokenRepository = new JdbcTokenRepositoryImpl();
+        // 此处需要设置数据源，否则无法从数据库查询验证信息
+        rememberMeTokenRepository.setDataSource(dataSource);
+        // 此处的 key 可以为任意非空值(null 或 "")，单必须和起前面
+        // rememberMeServices(RememberMeServices rememberMeServices).key(key)的值相同
+        PersistentTokenBasedRememberMeServices rememberMeServices =
+                new MyRememberMeServices("INTERNAL_SECRET_KEY", urlUserService, rememberMeTokenRepository);
+
+        // 该参数不是必须的，默认值为 "remember-me", 但如果设置必须和页面复选框的 name 一致
+        rememberMeServices.setParameter("rememberMe");
+
+        return rememberMeServices;
+    }
     /**
      * 配置校验方式 和 密码策略 关闭异常处理
      *

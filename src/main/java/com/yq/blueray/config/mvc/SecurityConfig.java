@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @Auther: yq
  * @Date: 2018-10-18 17:28
- * @Description:
+ * @Description: 安全配置
  */
 @Configuration
 public class SecurityConfig {

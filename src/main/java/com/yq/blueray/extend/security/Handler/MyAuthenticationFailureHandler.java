@@ -26,6 +26,7 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
         ObjectMapper mapper = new ObjectMapper();
         //设置对应状态码
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        e.printStackTrace();
         w.write(mapper.writeValueAsString(Msg.passwordError().add("exception",e)));
         w.close();
     }
