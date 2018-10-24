@@ -1,5 +1,7 @@
 package com.yq.blueray.crawler.controller;
 
+import static com.yq.blueray.common.utils.Msg.*;
+
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -37,7 +39,7 @@ public class CamelController {
         Wrapper<Bluray> wrapper = createWrapper(vo.getInstance());
         List<Bluray> list  = camelService.list(wrapper);
         PageInfo<Bluray> pageInfo= new PageInfo<Bluray>(list);
-        return Msg.success().add("info",pageInfo);
+        return SUCCESS.add("info",pageInfo);
     }
 
     @PutMapping("/crawlerImportant")
@@ -54,8 +56,8 @@ public class CamelController {
     public Msg updateAcceptablePrice(@RequestBody @Validated Bluray bluray){
         Boolean b  = camelService.updateById(bluray);
         if(b)
-            return Msg.success();
-        return Msg.fail();
+            return SUCCESS;
+        return FAIL;
     }
 
     /**

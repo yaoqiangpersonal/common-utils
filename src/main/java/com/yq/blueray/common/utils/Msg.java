@@ -13,43 +13,34 @@ import java.util.Map;
  * 
  */
 
-public class Msg {
+public enum Msg {
+	SUCCESS(200,"处理成功！"),
+
+	NOT_FOUND(404,"资源找不到！"),
+
+	PASSWORD_ERROR(4011,"密码错误！"),
+
+	USERNAME_ERROR(4010,"用户名错误！"),
+
+	CHECKCODE_ERROR(4012,"验证码错误！"),
+
+	FORBIDDEN(403,"没有权限，被禁止！"),
+
+	FAIL(500,"处理失败！");
+
+
 	//状态码   200-成功    404-失败
 	private final int code;
 	//提示信息
 	private final String msg;
-	
-	private Msg(int code,String msg){
-		this.code = code;
-		this.msg = msg;
-	};
-	
+
 	//用户要返回给浏览器的数据
 	private final Map<String, Object> extend = new HashMap<String, Object>();
 
-	public static Msg success(){
-		return new Msg(200,"处理成功！");
-	}
-	
-	public static Msg notFind(){
-		return new Msg(404,"资源找不到！");
-	}
-
-	public static Msg passwordError(){
-		return new Msg(4011,"密码错误！");
-	}
-
-	public static Msg usernameError(){
-		return new Msg(4010,"用户名错误！");
-	}
-
-	public static Msg checkCodeError(){
-		return new Msg(4012,"验证码错误！");
-	}
-
-	public static Msg fail(){
-		return new Msg(500,"处理失败！");
-	}
+	Msg(final int code,final String msg){
+		this.code = code;
+		this.msg = msg;
+	};
 
 	public Msg add(final String key,final Object value){
 		extend.put(key, value);

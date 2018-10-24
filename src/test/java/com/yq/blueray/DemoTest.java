@@ -7,18 +7,24 @@ import com.yq.blueray.security.po.User;
 import com.yq.blueray.taobao.entity.blueray.TOrder;
 import com.yq.blueray.utils.ImageUtil;
 import com.yq.blueray.utils.MD5Util;
+import org.apache.naming.factory.BeanFactory;
 import org.junit.Test;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
-import java.awt.*;
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @Auther: yq
@@ -29,8 +35,8 @@ public class DemoTest {
 
     @Test
     public void run(){
-        File sorce = new File("F:\\1\\报名2\\");
-        File dest = new File("F:\\png\\报名2\\");
+        File sorce = new File("C:\\Users\\Administrator\\Desktop\\DVD截图\\");
+        File dest = new File("C:\\Users\\Administrator\\Desktop\\1\\");
         try {
             ImageUtil.to(sorce,
                     800,
@@ -45,6 +51,7 @@ public class DemoTest {
 
     @Test
     public void demo(){
+        //LoginUrlAuthenticationEntryPoint
         AuthenticationManager au = new AuthenticationManager(){
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -76,10 +83,18 @@ public class DemoTest {
 
     @Test
     public void demo1(){
-        final Integer i;
-        i = o();
     }
 
+    private int select(List<Integer> list){
+        return q(5,list);
+    }
+
+    private int q(int size,List<Integer> list){
+        List<Integer> arrayList = new ArrayList<>();
+        return 0;
+    }
+    private void add(int size,List<Integer> list,List<String> arrayList,Integer count){
+    }
     private Integer o(){
         return new Integer(20);
     }

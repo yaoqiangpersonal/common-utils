@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -25,7 +26,6 @@ public class BluerayApplicationTests {
 
     @Test
     public void contextLoads() {
-
         try {
             User u = userDao.getByUserName("admin");
             System.out.println(u);

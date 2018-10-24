@@ -1,5 +1,6 @@
 package com.yq.blueray.config.mvc;
 
+import com.yq.blueray.extend.security.TestFilterSecurityInterceptor;
 import com.yq.blueray.extend.security.UrlAccessDecisionManager;
 import com.yq.blueray.extend.security.UrlFilterSecurityInterceptor;
 import com.yq.blueray.extend.security.UrlMetadataSourceService;
@@ -46,11 +47,26 @@ public class SecurityConfig {
      *
      * @return
      */
-/*    @Bean
+    @Bean
+    public TestFilterSecurityInterceptor getTestFilterSecurityInterceptor(){
+        TestFilterSecurityInterceptor testFilterSecurityInterceptor = new TestFilterSecurityInterceptor();
+        testFilterSecurityInterceptor.setUrlAccessDecisionManager(getUrlAccessDecisionManager());
+        testFilterSecurityInterceptor.setSecurityMetadataSource(getUrlMetadataSourceService());
+        return testFilterSecurityInterceptor;
+    }
+
+    /**
+     * 定义授权拦截器
+     *
+     * @return
+     */
+    @Bean
     public UrlFilterSecurityInterceptor getUrlFilterSecurityInterceptor(){
         UrlFilterSecurityInterceptor urlFilterSecurityInterceptor = new UrlFilterSecurityInterceptor();
         urlFilterSecurityInterceptor.setUrlAccessDecisionManager(getUrlAccessDecisionManager());
         urlFilterSecurityInterceptor.setSecurityMetadataSource(getUrlMetadataSourceService());
         return urlFilterSecurityInterceptor;
-    }*/
+    }
+
+
 }

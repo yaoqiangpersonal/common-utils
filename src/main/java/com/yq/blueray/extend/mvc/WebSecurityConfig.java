@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -58,7 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .addFilterAfter(customUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                .and()
+                .addFilterAt(customUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
@@ -72,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 //通过formlogin方法登录，并设置登录url
-                //.formLogin().loginPage("/login")
+                //.formLogin().loginPage("/login").loginProcessingUrl()
                 //指定登录成功后跳转到/index页面
                 //.defaultSuccessUrl("/user/success")
                 //指定登录失败后跳转到/login?error页面
@@ -105,6 +108,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private RememberMeServices rememberMeServices(){
         JdbcTokenRepositoryImpl rememberMeTokenRepository = new JdbcTokenRepositoryImpl();
         // 此处需要设置数据源，否则无法从数据库查询验证信息
+        //RememberMeAuthenticationFilter
         rememberMeTokenRepository.setDataSource(dataSource);
         // 此处的 key 可以为任意非空值(null 或 "")，单必须和起前面
         // rememberMeServices(RememberMeServices rememberMeServices).key(key)的值相同
